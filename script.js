@@ -1,6 +1,3 @@
-window.onload = function onload() {
-};
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -25,7 +22,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const meliFetch = async (query) => {
+const fetchSearchProducts = async (query) => {
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -42,15 +39,47 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  console.log('event');
+  console.log(event);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
+  const ul = document.querySelector('.cart__items');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  ul.appendChild(li);
   return li;
 }
 
-meliFetch('computador');
+const fetchAddItemToCart = async (ItemID) => {
+  console.log('clicou');
+  const url = `https://api.mercadolibre.com/items/${ItemID}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log(data);
+  const { id, title, salePrice } = data;
+  createCartItemElement({ sku: id, name: title, salePrice });
+};
+
+function addToCartSKU(event) {
+  const sku = event.target.parentNode.firstChild.innerText;
+  fetchAddItemToCart(sku);
+}
+
+function addToCartButton() {
+  const buttonList = document.querySelectorAll('.item__add');
+  console.log(buttonList.length);
+  // const buttonList = document.getElementsByClassName('item__add');
+  buttonList.forEach((button) => {
+    console.log('button');
+    button.addEventListener('click', addToCartSKU);
+  });
+}
+
+window.onload = function onload() {
+  fetchSearchProducts('computador');
+  // addToCartButton(); POR QUI NAO FUNCIONA SEM O TIMEOUT ?
+  setTimeout(addToCartButton, 1500);
+};
