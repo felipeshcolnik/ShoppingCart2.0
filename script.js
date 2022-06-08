@@ -22,48 +22,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const fetchSearchProducts = async (query) => {
-  const url = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  const listOfProducts = data.results;
-  const items = document.querySelector('.items');
-  listOfProducts.forEach((product) => {
-    const { id, title, thumbnail } = product;
-    items.appendChild(createProductItemElement({ sku: id, name: title, image: thumbnail }));
-  });
-};
-
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-
 function cartItemClickListener(event) {
-  console.log('event');
-  console.log(event);
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  const ul = document.querySelector('.cart__items');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  ul.appendChild(li);
-  return li;
-}
-
-const fetchAddItemToCart = async (ItemID) => {
-  console.log('clicou');
-  const url = `https://api.mercadolibre.com/items/${ItemID}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  console.log(data);
-  const { id, title, salePrice } = data;
-  createCartItemElement({ sku: id, name: title, salePrice });
-};
-
-function addToCartSKU(event) {
   const sku = event.target.parentNode.firstChild.innerText;
   fetchAddItemToCart(sku);
 }
@@ -74,12 +33,53 @@ function addToCartButton() {
   // const buttonList = document.getElementsByClassName('item__add');
   buttonList.forEach((button) => {
     console.log('button');
-    button.addEventListener('click', addToCartSKU);
+    button.addEventListener('click', cartItemClickListener);
   });
 }
+
+const fetchSearchProducts = async (query) => {
+  const url = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const listOfProducts = data.results;
+  const items = document.querySelector('.items');
+  listOfProducts.forEach((product) => {
+    const { id, title, thumbnail } = product;
+    items.appendChild(createProductItemElement({ sku: id, name: title, image: thumbnail }));
+  });
+  addToCartButton();
+};
+
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const ul = document.querySelector('.cart__items');
+  const li = document.createElement('li');
+  const button = document.createElement('button');
+  const div = document.createElement('div');
+  li.className = 'cart__item';
+  li.innerText = `${name} | SKU: ${sku} |  PRICE: $${salePrice}`;
+  button.innerText = ('retirar do carrinho');
+  button.addEventListener('click', () => ul.removeChild(div));
+  div.appendChild(li);
+  div.appendChild(button);
+  ul.appendChild(div);
+  return li;
+}
+
+const fetchAddItemToCart = async (ItemID) => {
+  const url = `https://api.mercadolibre.com/items/${ItemID}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const { id, title, price } = data;
+  // console.log(data.salePrice);
+  createCartItemElement({ sku: id, name: title, salePrice: price });
+};
 
 window.onload = function onload() {
   fetchSearchProducts('computador');
   // addToCartButton(); POR QUI NAO FUNCIONA SEM O TIMEOUT ?
-  setTimeout(addToCartButton, 1500);
+  // setTimeout(addToCartButton, 1500);
 };
