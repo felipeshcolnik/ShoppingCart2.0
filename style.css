@@ -45,6 +45,12 @@
   display: none;
 }
 
+.item .item__price {
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
 .item .item__title {
   flex-grow: 1;
   padding: 10px;
