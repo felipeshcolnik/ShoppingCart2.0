@@ -110,14 +110,28 @@ const fetchSearchProducts = async (query) => {
   addToCartButton();
 };
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function totalPrice() {
+  const ul = document.querySelector('.cart__items');
+}
+
+function clearCart() {
+  const button = document.querySelector('.empty-cart');
+  const ul = document.querySelector('.cart__items');
+  console.log(ul);
+  button.addEventListener('click', () => {
+    for (let i = 0; i < ul.childNodes.length; i = 0) {
+      ul.removeChild(ul.childNodes[0]);
+      console.log('apagou 1');
+    }
+    localStorage.clear();
+  });
+}
 
 window.onload = function onload() {
   fetchSearchProducts('computador');
   // addToCartButton(); POR QUI NAO FUNCIONA SEM O TIMEOUT ?
   // setTimeout(addToCartButton, 1500);
   getStorage();
+  clearCart();
   // localStorage.clear();
 };
