@@ -22,6 +22,60 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+function includeItemOnLocalStorage() {
+  const li = document.querySelectorAll('.cart__item');
+  for (let i = 0; i < li.length; i += 1) {
+    const object = {
+      info: li[i].innerHTML,
+      className: li[i].className,
+    };
+    localStorage.setItem(i, JSON.stringify(object));
+  }
+}
+
+function removeItemfromLocalStorage() {
+  includeItemOnLocalStorage();
+  const li = document.querySelectorAll('.cart__item');
+  localStorage.removeItem(li.length);
+}
+
+function getStorage() {
+  for (let i = 0; i < localStorage.length; i += 1) {
+    const texte = JSON.parse(localStorage.getItem(i));
+    console.log(texte.info);
+  }
+}
+
+function removeItemfromCart(item) {
+  const ul = document.querySelector('.cart__items');
+  ul.removeChild(item);
+  removeItemfromLocalStorage();
+}
+function createCartItemElement({ sku, name, salePrice }) {
+  const ul = document.querySelector('.cart__items');
+  const li = document.createElement('li');
+  const button = document.createElement('button');
+  const div = document.createElement('div');
+  li.className = 'cart__item';
+  li.innerText = `${name} | SKU: ${sku} |  PRICE: $${salePrice}`;
+  button.innerText = ('retirar do carrinho');
+  button.addEventListener('click', () => removeItemfromCart(div));
+  div.appendChild(li);
+  div.appendChild(button);
+  ul.appendChild(div);
+  includeItemOnLocalStorage();
+  return li;
+}
+
+const fetchAddItemToCart = async (ItemID) => {
+  const url = `https://api.mercadolibre.com/items/${ItemID}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  const { id, title, price } = data;
+  // console.log(data.salePrice);
+  createCartItemElement({ sku: id, name: title, salePrice: price });
+};
+
 function cartItemClickListener(event) {
   const sku = event.target.parentNode.firstChild.innerText;
   fetchAddItemToCart(sku);
@@ -29,10 +83,7 @@ function cartItemClickListener(event) {
 
 function addToCartButton() {
   const buttonList = document.querySelectorAll('.item__add');
-  console.log(buttonList.length);
-  // const buttonList = document.getElementsByClassName('item__add');
   buttonList.forEach((button) => {
-    console.log('button');
     button.addEventListener('click', cartItemClickListener);
   });
 }
@@ -54,32 +105,10 @@ const fetchSearchProducts = async (query) => {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const ul = document.querySelector('.cart__items');
-  const li = document.createElement('li');
-  const button = document.createElement('button');
-  const div = document.createElement('div');
-  li.className = 'cart__item';
-  li.innerText = `${name} | SKU: ${sku} |  PRICE: $${salePrice}`;
-  button.innerText = ('retirar do carrinho');
-  button.addEventListener('click', () => ul.removeChild(div));
-  div.appendChild(li);
-  div.appendChild(button);
-  ul.appendChild(div);
-  return li;
-}
-
-const fetchAddItemToCart = async (ItemID) => {
-  const url = `https://api.mercadolibre.com/items/${ItemID}`;
-  const response = await fetch(url);
-  const data = await response.json();
-  const { id, title, price } = data;
-  // console.log(data.salePrice);
-  createCartItemElement({ sku: id, name: title, salePrice: price });
-};
-
 window.onload = function onload() {
   fetchSearchProducts('computador');
   // addToCartButton(); POR QUI NAO FUNCIONA SEM O TIMEOUT ?
   // setTimeout(addToCartButton, 1500);
+  getStorage();
+  // localStorage.clear();
 };
