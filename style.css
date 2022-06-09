@@ -1,3 +1,7 @@
+* {
+  margin: 0;
+}
+
 .top-bar {
   align-items: center;
   display: flex;
@@ -17,8 +21,23 @@
   display: flex;
 }
 
+.header {
+  align-items: center;
+  background-color: green;
+  border-bottom: solid purple 6px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+#image-logo {
+  border: solid purple 4px;
+  width: 5vw;
+}
+
 .container {
   display: flex;
+  margin-top: 10px;
   justify-content: space-around;
   width: 100%;
 }
@@ -31,7 +50,7 @@
 }
 
 .item {
-  border: 2px solid blue;
+  border: 2px solid purple;
   border-radius: 5px;
   box-sizing: border-box;
   display: flex;
@@ -46,7 +65,7 @@
 }
 
 .item .item__price {
-  background-color: black;
+  background-color: purple;
   color: white;
   text-align: center;
 }
@@ -73,7 +92,7 @@
 .cart {
   display: flex;
   background-color: rgb(210, 212, 211);
-  border: solid black;
+  border: solid purple;
   flex-basis: 30%;
   flex-flow: column wrap;
 }
