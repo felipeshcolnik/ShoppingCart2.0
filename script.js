@@ -34,7 +34,7 @@ function totalPrice() {
   });
 
   const price = document.querySelector('.total-price');
-  price.innerHTML = `TOTAL R$ ${ttPrice}`;
+  price.innerHTML = `TOTAL R$ ${ttPrice.toFixed(2)}`;
 }
 
 function includeItemOnLocalStorage() {
@@ -162,7 +162,7 @@ function searchProducts() {
 }
 
 window.onload = function onload() {
-  fetchSearchProducts('computador');
+  fetchSearchProducts();
   // addToCartButton(); POR QUI NAO FUNCIONA SEM O TIMEOUT ?
   // setTimeout(addToCartButton, 1500);
   getStorage();

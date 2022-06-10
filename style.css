@@ -2,37 +2,31 @@
   margin: 0;
 }
 
-.top-bar {
-  align-items: center;
+.cart {
   display: flex;
-  height: 100px;
-  justify-content: space-around;
+  background-color: rgb(210, 212, 211);
+  border: solid purple;
+  flex-basis: 30%;
+  flex-flow: column wrap;
+}
+
+.cart .cart__title, .total-price {
+  flex-basis: 1;
+  font-size: 16pt;
+  text-align: center;
+}
+
+.cart .empty-cart {
+  margin: 0 20px;
+}
+
+.cart__item {
+  flex-basis: 1;
+  font-size: 12pt;
+}
+
+.cart__items button {
   margin-bottom: 10px;
-  width: 100%;
-}
-
-.top-bar .input-name-group {
-  align-items: flex-start;
-  display: flex;
-}
-
-.top-bar .input-terms-group {
-  align-items: flex-start;
-  display: flex;
-}
-
-.header {
-  align-items: center;
-  background-color: green;
-  border-bottom: solid purple 6px;
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-}
-
-#image-logo {
-  border: solid purple 4px;
-  width: 5vw;
 }
 
 .container {
@@ -42,11 +36,18 @@
   width: 100%;
 }
 
-.items {
+.header {
+  align-items: center;
+  background-color: green;
+  border-bottom: solid purple 1px;
   display: flex;
-  flex-basis: 70%;
-  flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
+#image-logo {
+  border: solid purple 4px;
+  width: 5vw;
 }
 
 .item {
@@ -89,25 +90,46 @@
   padding: 5px;
 }
 
-.cart {
+.items {
   display: flex;
-  background-color: rgb(210, 212, 211);
-  border: solid purple;
-  flex-basis: 30%;
-  flex-flow: column wrap;
+  flex-basis: 70%;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.cart .cart__title, .total-price {
-  flex-basis: 1;
-  font-size: 16pt;
-  text-align: center;
+.logo {
+  display: flex;
+  align-items: center;
 }
 
-.cart__item {
-  flex-basis: 1;
-  font-size: 12pt;
+.logo h1 {
+  color:white;
+  display: inline;
+  margin-left: 20px;
 }
 
-.cart__items button {
+.search-area span {
+  color:white;
   margin-bottom: 10px;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 16px;
+}
+
+.top-bar {
+  align-items: center;
+  display: flex;
+  height: 100px;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.top-bar .input-name-group {
+  align-items: flex-start;
+  display: flex;
+}
+
+.top-bar .input-terms-group {
+  align-items: flex-start;
+  display: flex;
 }
