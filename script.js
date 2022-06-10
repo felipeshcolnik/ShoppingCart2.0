@@ -131,15 +131,33 @@ const fetchSearchProducts = async (query) => {
   addToCartButton();
 };
 
+function clearChildrenList(list) {
+  for (let i = 0; i < list.childNodes.length; i = 0) {
+    list.removeChild(list.childNodes[0]);
+  }
+}
 function clearCart() {
   const button = document.querySelector('.empty-cart');
   const ul = document.querySelector('.cart__items');
   button.addEventListener('click', () => {
-    for (let i = 0; i < ul.childNodes.length; i = 0) {
-      ul.removeChild(ul.childNodes[0]);
-    }
+    clearChildrenList(ul);
     localStorage.clear();
     totalPrice();
+  });
+}
+
+function clearSaleProductsList() {
+  const button = document.querySelector('#search-btn');
+  const listOfSaleProducts = document.querySelector('.items');
+  button.addEventListener('click', () => clearChildrenList(listOfSaleProducts));
+}
+
+function searchProducts() {
+  const text = document.querySelector('.search-bar_box');
+  const button = document.querySelector('#search-btn');
+  button.addEventListener('click', () => {
+    fetchSearchProducts(text.value);
+    text.value = '';
   });
 }
 
@@ -150,4 +168,6 @@ window.onload = function onload() {
   getStorage();
   clearCart();
   totalPrice();
+  searchProducts();
+  clearSaleProductsList();
 };
