@@ -20,7 +20,7 @@ function createProductItemElement({
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('span', 'item__price', `R$ ${salePrice}`));
+  section.appendChild(createCustomElement('span', 'item__price', `R$ ${salePrice.toFixed(2)}`));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
   return section;
 }
@@ -83,7 +83,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   const button = document.createElement('button');
   const div = document.createElement('div');
   li.className = 'cart__item';
-  li.innerText = `${name} | SKU: ${sku} |  PRICE: $${salePrice}`;
+  li.innerText = `${name} | SKU: ${sku} |  PREÇO: $${salePrice}`;
   button.innerText = ('retirar do carrinho');
   button.addEventListener('click', () => removeItemfromCart(div));
   div.appendChild(li);
@@ -115,11 +115,15 @@ function addToCartButton() {
 }
 
 const fetchSearchProducts = async (query) => {
+  const loading = document.createElement('p');
+  loading.className = 'loading';
+  loading.innerHTML = 'Aguarde enquanto a página esta sendo carregada';
+  const items = document.querySelector('.items');
+  items.appendChild(loading);
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
   const response = await fetch(url);
   const data = await response.json();
   const listOfProducts = data.results;
-  const items = document.querySelector('.items');
   listOfProducts.forEach((product) => {
     const {
       id, title, thumbnail, price,
@@ -128,6 +132,9 @@ const fetchSearchProducts = async (query) => {
       sku: id, name: title, image: thumbnail, salePrice: price,
     }));
   });
+  if (listOfProducts.length > 0) {
+    items.removeChild(items.firstChild);
+  }
   addToCartButton();
 };
 
@@ -156,8 +163,12 @@ function searchProducts() {
   const text = document.querySelector('.search-bar_box');
   const button = document.querySelector('#search-btn');
   button.addEventListener('click', () => {
-    fetchSearchProducts(text.value);
-    text.value = '';
+    if (!text.value) {
+      fetchSearchProducts();
+    } else {
+      fetchSearchProducts(text.value);
+      text.value = '';
+    }
   });
 }
 
